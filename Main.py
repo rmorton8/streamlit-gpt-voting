@@ -3,6 +3,8 @@ import snowflake.connector
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+import re
+import string
 from model import GeneralModel
 
 
@@ -72,6 +74,27 @@ def generate_question_column(table_name, data_dict, question, num):
     return
 
 
+def insert_new_words(words_list):
+    my_cnx = snowflake.connector.connect(**st.secrets['snowflake'])
+    with my_cnx.cursor() as my_cur:
+        for word in words_list:
+            my_cur.execute(f"insert into gpt_words values ('{word}')")
+    my_cnx.close()
+    return
+
+
+def word_counter(new_words_list):
+    insert_new_words(new_words_list)
+    # grab all words and plot frequency
+    my_cnx = snowflake.connector.connect(**st.secrets['snowflake'])
+    with my_cnx.cursor() as my_cur:
+        my_cur.execute(f"select * from gpt_words")
+        output = pd.DataFrame(my_cur.fetchall())
+    my_cnx.close()
+    return output
+    
+
+
 def app():
 
     # Creating an object of prediction service
@@ -100,7 +123,8 @@ def app():
     with tab3:
         question = "It's your senior year of highschool and you recieve an admissions letter from your dream school."
         generate_question_column("SCHOOL_VOTES", school_dict, question, 3)
-
+        
+    # GPT-3 Section
     with tab4:
         # Using the streamlit cache
         @st.cache
@@ -127,5 +151,9 @@ def app():
                 with st.spinner(text="In progress"):
                     report_text = process_prompt(input)
                     st.markdown(report_text)
+                    word_list = re.sub('['+string.punctuation+']', '', report_text.lower()).split()
+                    output = word_counter(word_list)
+                    st.dataframe(output)
+               
         else:
             st.error("🔑 Please enter API Key")
