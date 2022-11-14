@@ -103,7 +103,7 @@ def app():
 
     with tab4:
         # Using the streamlit cache
-#         @st.cache
+        @st.cache
         def process_prompt(input):
 
             return pred.model_prediction(input=input.strip() , api_key=api_key)
