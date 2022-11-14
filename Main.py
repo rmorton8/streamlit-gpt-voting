@@ -85,7 +85,7 @@ def app():
         "Powered by Snowpark for Python and GPT-3 | Made with Streamlit")
     st.header("Vote for the situations you think are less desirable!")
 
-    tab1, tab2, tab3, tab4 = st.tabs(['COVID', 'BANK', 'SCHOOL', "'Roll the dice!'"])
+    tab1, tab2, tab3, tab4 = st.tabs(['COVID', 'BANK', 'SCHOOL', "'Roll the dice!"])
     # COVID section
     with tab1:
         question = 'Bob thinks he may have contracted COVID-19, and goes to get tested.'
