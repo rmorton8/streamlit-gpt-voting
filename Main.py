@@ -155,7 +155,7 @@ def app():
                     # remove specified words
                     spec_words = re.sub('['+string.punctuation+']', '', input.lower()).split()
                     for word in spec_words:
-                        word_list.pop(word)
+                        word_list.remove(word)
                     output = word_counter(word_list)
                     st.dataframe(output)
                
