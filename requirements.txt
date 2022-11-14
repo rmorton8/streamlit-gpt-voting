@@ -1,1 +1,4 @@
+# requirements.txt
 openai==0.22.0
+snowflake-connector-python
+plotly
