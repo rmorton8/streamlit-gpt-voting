@@ -152,6 +152,10 @@ def app():
                     report_text = process_prompt(input)
                     st.markdown(report_text)
                     word_list = re.sub('['+string.punctuation+']', '', report_text.lower()).split()
+                    # remove specified words
+                    spec_words = re.sub('['+string.punctuation+']', '', input.lower()).split()
+                    for word in spec_words:
+                        word_list.pop(word)
                     output = word_counter(word_list)
                     st.dataframe(output)
                
