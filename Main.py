@@ -91,13 +91,8 @@ def word_counter(new_words_list):
         my_cur.execute(f"select * from gpt_words")
         word_df = pd.DataFrame(my_cur.fetchall())
     my_cnx.close()
-    col1, col2 = st.columns(2)
-    with st.container():
-        with col1:
-            st.dataframe(word_df)
-        with col2:
-            fig = px.histogram(word_df)
-            st.plotly_chart(fig, use_container_width=True)
+    fig = px.histogram(word_df)
+    st.plotly_chart(fig)  #, use_container_width=True)
     return
     
 
@@ -162,7 +157,7 @@ def app():
                     spec_words = re.sub('['+string.punctuation+']', '', input.lower()).split()
                     for word in spec_words:
                         word_list.remove(word)
-                    output = word_counter(word_list)
+                    word_counter(word_list)
                     
                
         else:
